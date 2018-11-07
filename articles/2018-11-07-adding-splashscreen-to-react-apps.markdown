@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Adding splash screens to React single pahe application"
+title: "Adding splash screens to React single page application"
 description: "Learn how to add splash screen to your react application."
 date: 
 category: React
