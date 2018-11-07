@@ -222,3 +222,5 @@ With all that in place, you need to update the authentication handler to go alon
 With all that covered, you have successfully added a splash screen to your app. Refresh the apps page in your browser and feel the splash screen effect.
 
 ## Conclusion
+
+Implementing splash screens isn't a big deal and is relatively easy. Therefore, try to implement splash screens in your web apps to improve user experience. Happy hacking!
