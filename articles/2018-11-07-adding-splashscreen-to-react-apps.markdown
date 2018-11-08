@@ -59,7 +59,7 @@ After the installation, start the application :
 npm run start
 ```
 
-With that covered, open the project directory in your code editor of choice and create a new file `withSplashScreen.js` in the `src/Components` folder.
+With that covered, open the project directory in your code editor of choice and create a new file `withSplashScreen.js` in the `src/components` folder.
 
 Next, open the `withSplashScreen.js` file and add the following into it :
 
@@ -153,7 +153,7 @@ export default withSplashScreen(App);
 
 In the code above, you deleted the callback route because you won't be needing it anymore.
 
-Next, open the `Frameworks.js` file in `src/Components` and replace the code with this :
+Next, open the `Frameworks.js` file in `src/components` and replace the code with this :
 
 ```javascript
 import React, {Component} from 'react';
