@@ -71,7 +71,7 @@ import auth0Client from '../Auth';
 import firebaseClient from '../services/firebase';
 
 
-const fbTokenFactory = 'http://localhost:3001/firebase';
+const fbTokenFactory = 'https://wt-21d474de14a60e389a0fa7c8e77c224f-0.sandbox.auth0-extend.com/webtasks/firebase';
 
 function LoadingMessage() {
   return (
