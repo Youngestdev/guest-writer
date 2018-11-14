@@ -55,6 +55,12 @@ To begin, you'll have to clone [this repo](https://github.com/Youngestdev/react-
 git clone https://github.com/Youngestdev/react-splashscreen
 ```
 
+Next, navigate into the folder directory :
+
+```bash
+cd react-splashscreen
+```
+
 After that, you install the application dependencies :
 
 ```bash
