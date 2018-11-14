@@ -25,7 +25,7 @@ related:
 
 ---
 
-**TL;DR:** In this article, you will learn how to add splash screen to your React single page apps (SPA). You can find the finalized code in [this GitHub repo]()
+**TL;DR:** In this article, you will learn how to develop a splash screen for Sing-Page Apps (SPA). You can find the finalized code in [this GitHub repo]()
 
 ---
 
@@ -33,7 +33,7 @@ related:
 
 A splash screen is a page displayed to notify a user when an application is currently in a loading state. In most cases, splash screens are employed when data is fetched from within or outside the application e.g database . The splash screen, serves as a replacement for blank pages which is usually shown when loading data externally.
 
-## Why Your App Should Have A Splash Screen
+### Why Your App Should Have A Splash Screen
 
 In your application, a splash screen should be added to indicate when your app is loading and to tell the user that the app isn't dormant. In a situation whereby your loading app shows a blank page for about a minute or two, the user will get bored and loose interest thinking it is a dummy app whereas the splash screen does otherwise. Therefore, adding a splash screen to your application keeps the user engaged while your app loads fully.
 
@@ -43,21 +43,35 @@ A Higher-Order Component ( HOC ), is a function that takes in a component as an 
 
 An example of a higher-order component is the splash screen component which you'll be using later.
 
-## Cloning The Sample App repo
+### What you'll be building
 
-To begin, you'll have to clone [this repo](https://github.com/Youngestdev/react-splashscreen) and follow the installation process in the `README.MD` file:
+The application which you'll be adding a splash screen, is a Single-Page Application (SPA) that uses an Auth0 protected serverless backend server which displays a list of Node.js frameworks to an authenticated user. 
+
+### Cloning The Sample App repo
+
+To begin, you'll have to clone [this repo](https://github.com/Youngestdev/react-splashscreen) :
 
 ```bash
 git clone https://github.com/Youngestdev/react-splashscreen
 ```
 
-## Building the Splash Screen Component
+After that, you install the application dependencies :
 
-After the installation, start the application :
+```bash
+npm install
+```
+
+
+After the installation, start the application by running the command :
 
 ```bash
 npm run start
 ```
+
+A browser window will be automatically opened displaying the live app at `http://localhost:3000`.
+
+## Building the Splash Screen Component
+
 
 With that covered, open the project directory in your code editor of choice and create a new file `withSplashScreen.js` in the `src/components` folder.
 
@@ -119,11 +133,29 @@ export default withSplashScreen;
 
 ```
 
-In the code above, you define a function `LoadingMessage()` that displays a circle spinner after which a higher-order component `withSplashScreen` that handles the authentication and data fetching is defined.
+In the code above, you define a variable `fbTokenFactory` and a function `LoadingMessage()` before the `withSplashScreen` component. 
+
+The `fbTokenFactory` variable, holds the url to the backend server deployed on a [serverless sandbox](https://webtask.io) which is later called in the axios handler :
+
+```javascript
+
+axios.get(fbTokenFactory, {
+  headers: { authorization: `Bearer ${auth0Client.getIdToken()}` }
+});
+        
+```
+
+The `loadingMessage()` on the other hand, displays a circular spinner when invoked. It is invoked in the `withSplashScreen` render method.
+
+The `withSplashScreen` component, which is a higher-order component, returns a new component passed in as an argument prefixed with the `componentDidMount` lifecycle method that deals with session checking to detect the authentication state of a user and handles the firebase realtime database custom token generation. The authentication management is handled with this line of code :
+
+```javascript
+await auth0Client.loadSession();
+```
 
 ## Wrapping The Application With The Splash Screen Component
 
-With the splash screen component built, it's not yet functional therefore, you'll wrap the `App` component in `App.js` in the `withSplashScreen` function since it's a higher-order component.
+With the splash screen component built, it's not yet functional. Therefore, you'll wrap the `App` component in `App.js` in the `withSplashScreen` function since it's a higher-order component.
 
 Open `App.js` and replace the code with :
 
@@ -151,7 +183,9 @@ export default withSplashScreen(App);
 
 ```
 
-In the code above, you deleted the callback route because you won't be needing it anymore.
+In the code above, you imported the `withSplashScreen` component from `./components/withSplashScreen` and then deleted the callback route because you won't be needing it anymore as the `App` component will handle the redirection itself due as a result of being wrapped in the `withSplashScreen` component.
+
+> The callback route, which houses the `Callback` component was responsible for handling the user authentication process and redirecting users after login. You can read more about it [here](https://auth0.com/docs/users/redirecting-users).
 
 Next, open the `Frameworks.js` file in `src/components` and replace the code with this :
 
@@ -162,7 +196,7 @@ import {CircleSpinner} from 'react-spinners-kit';
 
 function Framework(framework, id) {
   return (
-    <div className="row" key={id}>
+    <div className="mb-2 row" key={id}>
       <div className="card">
         <div className="card-body">
           <h5 className="card-title">{framework.name}</h5>
@@ -185,7 +219,7 @@ class Frameworks extends Component {
   }
 
   componentDidMount() {
-    firebaseClient.setBuildingsListener(querySnapshot => {
+    firebaseClient.setFrameworksListener(querySnapshot => {
       const frameworks = [];
       querySnapshot.forEach(framework => {
         frameworks.push(framework.data());
@@ -211,16 +245,19 @@ class Frameworks extends Component {
 export default Frameworks;
 ```
 
-In the code above, you updated the `Frameworks` component by adding a circle spinner to show the loading state.
+In the code above, you updated the `Frameworks` component by adding a circle spinner component `CircleSpinner` imported from `react-spinners-kit` to indicate when the app is loading by showing a spinning icon instead of having a blank dummy page.
 
 ## Refactoring The Authentication Handler
 
-With all that in place, you need to update the authentication handler to go along with the changes made. Therefore, open `Auth.js` file and edit the eigth line from `'http://localhost:3000/callback'` to `'http://localhost:3000'.`
+The authentication logic is managed and controlled in the `Auth.js` file, it stores the credentials needed to connect, login and out of Auth0. With the introduction of the higher-order component `withSplashScreen`, the need for a callback route cease to exist. Therefore, open `Auth.js` file and edit the callback route on the eight line from `'http://localhost:3000/callback'` to `'http://localhost:3000'.`
+
 
 ## Running Application
 
-With all that covered, you have successfully added a splash screen to your app. Refresh the apps page in your browser and feel the splash screen effect.
+With all that covered, you have successfully added a splash screen to the app. Refresh the App window in your browser and feel the splash screen effect.
 
 ## Conclusion
 
-Implementing splash screens isn't a big deal and is relatively easy. Therefore, try to implement splash screens in your web apps to improve user experience. Happy hacking!
+In this article, you learned, through a practical guide, how to add a splash screen to a Single-Page App (SPA).
+
+Implementing splash screens is relatively easy. Therefore, try to implement splash screens in your web apps to improve user experience. Happy hacking!
